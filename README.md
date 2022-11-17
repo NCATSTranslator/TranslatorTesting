@@ -9,7 +9,7 @@ The NCATS Biomedical Data Translator [TRAPI Resource Validator Web Dashboard](ht
 ### Table of Contents
 
 - [Operation of the Web Dashboard](./web_dashboard_operation.md)
-- [Knowledge Graph Semantic Tests](./kg_unit_tests.md)
+- [Knowledge Graph Semantic Tests](./kg_unit_test_definitions.md)
 - [Validation Results](https://translator-reasoner-validator.readthedocs.io/en/latest/#validation_code_definitions.md)
 
 ## Test File Curator Documentation
