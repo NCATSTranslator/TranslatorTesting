@@ -1,6 +1,8 @@
-# Translator Testing
+# Translator Testing Framework
 
 This site describes and facilitates coordination of the development of the global information system testing framework of the [NCATS Biomedical Data Translator](https://ncats.nih.gov/translator).
+
+An initial slide deck overview of the Translator Testing Framework is [available here](https://docs.google.com/presentation/d/1JfvsNN4-zNSt0U9Sj8r9QXmIqaPQxWvimqdnj3i-5YM/edit#slide=id.p2).
 
 ## Related Project Repositories
 
