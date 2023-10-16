@@ -6,11 +6,12 @@ An initial slide deck overview of the Translator Testing Framework is [available
 
 ## Meeting Minutes
 
-Links to minutes of the [Feedback Repo 500, Testing Infrastructure Weekly Meetings and related meetings.](meetings)
+Running agenda and minutes of the [Translator Testing Infrastructure Meeting](https://docs.google.com/document/d/1TLYUsb19bpA5BuFfUq6RzfHG2J6JvYfaFYvcmtw2Epc/edit#heading=h.74quxijqjwj7).
+
+Additional to notes from the [Feedback Repo 500, Testing Infrastructure Weekly Meetings and related meetings.](meetings)
 
 ## Related Project Repositories
 
-- [Testing Code](https://github.com/NCATSTranslator/testing)
 - [Test Case Schema](https://github.com/TranslatorSRI/test-case-schema)
 - [Test Suite Repository](https://github.com/NCATSTranslator/Tests)
 - [Test Harness](https://github.com/TranslatorSRI/TestHarness)
@@ -19,3 +20,4 @@ Links to minutes of the [Feedback Repo 500, Testing Infrastructure Weekly Meetin
 - [SRI_Testing](https://github.com/TranslatorSRI/SRI_testing)
 - [Reasoner Validator](https://github.com/NCATSTranslator/reasoner-validator)
 - [KGX](https://github.com/biolink/kgx) (i.e. knowledge graph validation option)
+- [Some legacy testing code](https://github.com/NCATSTranslator/testing)
