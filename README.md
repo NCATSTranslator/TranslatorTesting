@@ -4,8 +4,13 @@ This site describes and facilitates coordination of the development of the globa
 
 An initial slide deck overview of the Translator Testing Framework is [available here](https://docs.google.com/presentation/d/1JfvsNN4-zNSt0U9Sj8r9QXmIqaPQxWvimqdnj3i-5YM/edit#slide=id.p2).
 
+## Meeting Minutes
+
+Links to minutes of the [Feedback Repo 500, Testing Infrastructure Weekly Meetings and related meetings.](meetings)
+
 ## Related Project Repositories
 
+- [Testing Code](https://github.com/NCATSTranslator/testing)
 - [Test Case Schema](https://github.com/TranslatorSRI/test-case-schema)
 - [Test Suite Repository](https://github.com/NCATSTranslator/Tests)
 - [Test Harness](https://github.com/TranslatorSRI/TestHarness)
