@@ -12,7 +12,7 @@ Additional to notes from the [Feedback Repo 500, Testing Infrastructure Weekly M
 
 ## Related Project Repositories
 
-- [Test Case Schema](https://github.com/TranslatorSRI/test-case-schema)
+- [Translator Testing Model schema](https://github.com/TranslatorSRI/TranslatorTestingModel)
 - [Test Suite Repository](https://github.com/NCATSTranslator/Tests)
 - [Test Harness](https://github.com/TranslatorSRI/TestHarness)
 
