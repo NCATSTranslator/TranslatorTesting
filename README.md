@@ -20,4 +20,4 @@ Additional to notes from the [Feedback Repo 500, Testing Infrastructure Weekly M
 - [SRI_Testing](https://github.com/TranslatorSRI/SRI_testing)
 - [Reasoner Validator](https://github.com/NCATSTranslator/reasoner-validator)
 - [KGX](https://github.com/biolink/kgx) (i.e. knowledge graph validation option)
-- [Some legacy testing code](https://github.com/NCATSTranslator/testing)
+- [Some legacy testing code - need to review/deprecate?](https://github.com/NCATSTranslator/testing)
