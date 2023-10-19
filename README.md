@@ -12,9 +12,10 @@ Additional to notes from the [Feedback Repo 500, Testing Infrastructure Weekly M
 
 ## Related Project Repositories
 
-- [Translator Testing Model schema](https://github.com/TranslatorSRI/TranslatorTestingModel)
-- [Test Suite Repository](https://github.com/NCATSTranslator/Tests)
-- [Test Harness](https://github.com/TranslatorSRI/TestHarness)
+- [Translator Testing Model schema](https://github.com/TranslatorSRI/TranslatorTestingModel) - schema relating to test resource specifications
+- [Test Suite Repository](https://github.com/NCATSTranslator/Tests) - catalog of test resource specifications
+- [Test Harness](https://github.com/TranslatorSRI/TestHarness) - automates running of test runners
+- [Test Manager](https://github.com/TranslatorSRI/TestManager) - manages recording of, access to and publication of, test sessions and their results
 
 ## Related Testing Projects
 - [SRI_Testing](https://github.com/TranslatorSRI/SRI_testing)
