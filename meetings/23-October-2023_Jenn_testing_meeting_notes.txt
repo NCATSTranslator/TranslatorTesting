@@ -1,0 +1,20 @@
+The concept of "Block List" probably needs to be included into the TranslatorTestingModel. A Block List is to a Test Asset what a Test Suite is to a Test Case... just some kind of (user meaningful) aggregation of the underlying test entity concerned.
+
+Perhaps ad hoc (user) tagging of Test Assets might also be equivalent or complementary to the block list idea, that is, one simply tags TestAssets to specify a list of such assets which is a "block list". This tagging of sets of Test Assets defining "Block Lists" could, in principle, be done from the Test Manager UI... If the TestRunners need to know about a list of related TestAssets, then the model needs to know about it!  
+
+Clarification of the difference between a Test Asset and Test Case.
+
+a Test Case is an operationalized "Test Asset instantiated with a comparison (code)" for running in a Test Runner.
+
+That said, an "Expected Output" column in the Test Assets does feel somewhat like a 'comparison' in abstract(?).
+
+Back to the Test Harness / Test Manager: two modes of test running:
+
+1. A (text) specification/declaration of a Test Suite sitting on a server, automatically read by the Test Harness (triggered automatically by a cron job to periodically run).
+
+2. A user composing ("one of", "ad hoc") a Test Suite specification while sitting in front of the "Test Manager" UI or somehow calling the "Test Manager" API, with such a specification
+
+Of course, the two modes become blurred if the Test Manager UI is used to create a Test Suite which the Test Harness is then instructed to periodically run automatically
+
+
+
