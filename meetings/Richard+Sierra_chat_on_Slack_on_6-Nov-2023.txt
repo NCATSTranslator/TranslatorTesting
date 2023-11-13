@@ -1,0 +1,313 @@
+Good morning 
+@Sierra Moxon (SRI)
+8:23
+Once again: https://github.com/linkml/linkml-runtime/pull/282
+
+#282 bug fix in _construct_target_class()?
+The use case in which the input to the patched code is a simple JSON List of (otherwise LinkML-schema compliant) class objects crashes with the code. I noted that the case of a single JSON dictionary object works fine in the line below the patched one (that processes a list of objects).
+One notes that BaseModel.parse_obj() appears to only want a dictionary as its argument, not ***kwargs* from the 'x' dictionary object.
+It is suggested that some kind of LinkML defined 'collection' class slot needs be present to constrain data entry. I understand the motivation for that. I suppose there is an argument here that the Model should constraint the presence or absence of "multivalued" inputs.
+That said… Show more
+Comments
+1
+<https://github.com/linkml/linkml-runtime|linkml/linkml-runtime>linkml/linkml-runtime | Nov 3rd | Added by GitHub
+8:23
+I did add some comments to the PR description
+8:24
+I didn't mention names but you know who suggested the use of a 'collection class', LOL
+:grin:
+1
+
+8:26
+Anyhow, I suppose I could backpeddle this morning and put some collection classes back into the model, which I had previously but removed when I realized that TestSuite seemed to make it mildly redundant
+8:27
+That said, Max notes that TestRunners could execute either full TestSuites or a single TestCase.
+8:27
+I asked if a single TestCase ought to be wrapped into a "TestSuite of one" but he seemed resistant to that slight of hand
+8:27
+No matter...
+8:28
+That said, I'm also wondering to myself how best to put the collection class(es) back into the model. I am of two (maybe not completely contradictory) minds:
+8:29
+add a TestEntityCollection class at the top of the hierarchy which has test_entities: multivalued... etc.
+8:30
+then have TestSuite inherit from it. The one limitation is that test_cases: multivalued in the current TestSuite definition is a bit more semantically transparent than "test_entities" (TestEntity are simple objects... they can hold any other child subclass but parsing child subclasses may be tricky...)
+8:31
+Option 2. Define explicit collection classes for everything for which our input data is likely to be a list...
+
+
+Sierra Moxon (SRI)
+  8:34 AM
+Maybe I have lost the plot at the end of last week a bit: can you follow the "pattern" of collection classes, with TestCase and TestSuite (e.g. TestCase is ~ equivalent to "TestAssetCollection" class using them as the "target class") >
+
+
+Richard Bruskiewich (SRI)
+  8:34 AM
+Actually, a TestSuite is a List of TestCase instances
+8:35
+TestAsset instances are mapped onto (one or more) TestCases
+
+
+Sierra Moxon (SRI)
+  8:36 AM
+yes, a similar pattern as we go up
+8:36
+(and TestCases can have a collection of TestAssets)
+
+
+Richard Bruskiewich (SRI)
+  8:36 AM
+(BTW, the way we persist our TestCase instances is still a bone of contention with Max, LOL... I think that TestCase instances are sometimes more ephemeral than we make them out to be, like "Schodinger's Cat" - real only once measured!)
+
+
+Sierra Moxon (SRI)
+  8:36 AM
+Basically, I'm just asking if you can use the existing classes in the pattern I put up there, and see if your bug goes away?
+8:37
+W/re to Max, I am STILL confused what he wants instantiated in that repo - maybe we can pin him and Andrew down today in our meeting.
+
+
+Richard Bruskiewich (SRI)
+  8:37 AM
+I'll check right now if the bug goes away if I use a TestAssetCollection class again.
+
+
+Sierra Moxon (SRI)
+  8:38 AM
+(and by confused, I mean, I think Andrew and Max/Chris disagree on the level of instantiation to do on these classes)
+
+
+Richard Bruskiewich (SRI)
+  8:38 AM
+Even Jenn is a bit confusing on that front
+:grin:
+1
+:sweat_smile:
+1
+
+
+
+Sierra Moxon (SRI)
+  8:38 AM
+I get the feeling that Chris and Max want benchmarks to be formalized in the Tests repo, and Andrew does not want anything touched in Benchmarks
+8:39
+Jenn won't let me speak in meetings, or I would be louder in trying to solve some of this.
+
+
+Richard Bruskiewich (SRI)
+  8:39 AM
+TestAsset => TestCase (TestAsset with "executable code") => TestSuite (an executed collection of Test Cases)
+:+1::skin-tone-2:
+1
+
+8:40
+Yeah, I totally sympathize with Andrew
+8:40
+I think you know what I've been saying on that front: Andrew's TSV input file are a collection of TestAsset instances
+:+1::skin-tone-2:
+1
+:100:
+1
+
+
+
+Sierra Moxon (SRI)
+  8:40 AM
+I don't know if I agree or not with instantiating benchmarks in yet another repo.  I'd rather just have the benchmark tests, just agree with "the schema" so Max has a contract to code to
+
+
+Richard Bruskiewich (SRI)
+  8:41 AM
+the "TestSuite" is simply running the Benchmark code on all of that file
+
+
+Sierra Moxon (SRI)
+  8:41 AM
+I don't think we need to physically copy them to another repo
+8:41
+yes I completely agree with that
+8:41
+(even if we don
+8:41
+t ever reuse those, they are assets - and ITS IMPORTANT to call them that so folks know where to put more work)
+8:42
+that was the whole point (registered TM) in talking about a schema -- because I was confused at the difference between a test asset in benchmarks and a test asset in semantic smoke tests :grin: (edited) 
+
+
+Richard Bruskiewich (SRI)
+  8:43 AM
+The TestCase instances are ephemeral inside the Benchmark but reported as "real" results: given a line in his input TSV (input.subject_id used to populate a TRAPI template, query, check the TRAPI response against the input.object_id => found? => Pass? not found? => Fail?)
+
+
+Sierra Moxon (SRI)
+  8:43 AM
+yeah that is completely P/F
+8:44
+which means there is something political going on.
+
+
+Richard Bruskiewich (SRI)
+  8:44 AM
+At the end of the day, the heart of ALL Translator TestAsset instances is simply instances of (possibly embellished): Subject--Predicate->Object (edited) 
+8:44
+Jenn is "right" - such entries are "TestRunner agnostic"
+8:44
+which makes them "TestAssets"
+8:46
+the same S-P-O (with or without some kind of semantic "expectation" a.k.a. expected Translator query outcome expressed in some abstract scientific sense...i.e. never see, must_see, first hit, first 4 hits, etc.) can be used in multiple TestRunner instances for different testing objectives
+8:48
+I suspect that many (most?) TestCase instances can be parametrically declared, not explicitly enumerated in the Tests repo; TestSuites in a similar fashion (as a collection of (possibly parametrically declared) TestCases)
+:+1::skin-tone-2:
+1
+
+8:50
+And for TestAssets, we do want to retrieve all of them deterministically repeatable (i.e. can be run as many times as needed with identical stream of TestAsset instances made available indefinitely)
+8:52
+But in principle, like you and I are saying, the file of such TestAssets don't necessarily need to be stored in the Tests repository, although in Andrew's case (and maybe SRI_Testing), there is no harm in doing so and maybe some modest advantage of perpertual retension (with versioning) in one place.
+
+
+Sierra Moxon (SRI)
+  8:53 AM
+I just worry about the size of that repo -- but we can refactor if it gets too large.
+8:53
+will we remove them from the benchmarks repo then?  As to not confuse people?
+
+
+Richard Bruskiewich (SRI)
+  8:57 AM
+I suspect that it won't be so bad, but having said that, why create huge document sets of TestCase (or worse, TestSuite JSON with embedded TestCase JSON with embedded TestAsset JSON) if in fact, we can just store the original TestAsset files (as TSV, not JSON, or perhaps, more succinctly with a hybrid of TSV and (parametric) YAML or JSON of semantics "shared" by all test cases in the TSV), and store a small number of TestCase (and TestSuite) parametric declarations pointing back to the TestAsset file(s)?
+8:59
+We can let the TestHarness or TestRunners (where applicable) or some intermediate library connecting those pieces together, to internally "expand" the TestAssets into TestCases into TestSuites, then 'reporting' the results in some expected format.
+8:59
+Max pointed out to me that Pytest doesn't provide much information about the original TestCase content when it publishes a result.
+9:02
+I know ... that was a tricky problem I fixed in the implementation of SRI_Testing: the input edges where "taken along" with the (dynamically generated) test cases, and Pytest dutifully handed this extra information over to the test session result processing code, where I used it to generate full JSON reports of the (Pytest cryptic) results into the JSON report of the Test(Suite/Case) for storage in a results database (file based or MongoDb) for retrieval by the "Dashboard" my son wrote to display the SRI_Testing reports in a human friendly way.
+9:03
+I strongly suspect that our new Testing Infrastructure can achieve the same outcome simply if TestRunners have access to the same  Pytest override method, since they will exactly know the content of their test case instances.
+9:05
+What I just don't know - I haven't looked - is how Max's TestHarness/Runner world uses Pytest... how much he relies on TestRunners being a simple "black box" that takes explicit "TestCase" input data, and simply says "pass/fail"
+9:05
+I probably can get a sense of that later this week, as I continue working on what I'm doing now
+9:06
+I know that Max wants to present a "Benchmark" test case example today. He said on Friday. I don't know how it will support or refute the alternate universe vision I see in the framework.
+:+1::skin-tone-2:
+1
+
+9:06
+I guess we'll see.
+9:07
+I'm spending alot of time writing justifications of testing philosophy rather than working on the code at my end..
+9:07
+sigh...
+9:07
+As the saying goes: (s)he who codes first, wins, LOL
+:sweat_smile:
+1
+
+New
+
+
+Sierra Moxon (SRI)
+  9:08 AM
+unsolicited 2 cents: having users manually enter TSVs of test assets seems like a very error-prone solution...
+
+
+Richard Bruskiewich (SRI)
+  9:08 AM
+you mean, Jenn's one entry at a time solution?
+9:08
+Andrew's TSV entries are pretty simple
+
+
+Sierra Moxon (SRI)
+  9:08 AM
+(also storing assets + cases + suites redundantly also seems overkill -- but alas, Max asked for cases and suites, not assets... again, a set of definitions for our terms is really helpful)
+
+
+Richard Bruskiewich (SRI)
+  9:11 AM
+My PR about a testing library facade that returns a Python Generator of Test Cases is targeting that: Max expects to access a List of TestCases... I'm simply giving him a Python Generator a.k.a. Iterator of TestCase instances (less worried about the TestSuite part... its mainly metadata about a List of TestCases, as far as I can see...)
+9:11
+(or rather, a TestSuite == manage collection of TestCase instances
+9:13
+by putting an "interface/api" layer in between Max's TestHarness accessing the TestCases (in a loop), the use of TestCases is decoupled from their specification (in the Tests repo)
+9:14
+Max actually has - I think - admitted that TestRunners can be designed to take single TestCase instances or a TestSuite of TestCases (internally iterated).
+9:15
+The current design assumes that the TestHarness serves as the pipe of TestCase entries directly read from the Tests repo, one at a time, into the TestRunners
+9:15
+Hence, a 'for' loop in the code.
+9:16
+Sure, that works.. but likely a bottle neck and inefficient.
+9:17
+The TestHarness ought to just know how to map a TestEntity onto one or more appropriate TestRunner instances, and simply hand that TestEntity over to the TestRunner for processing.
+9:19
+I say "TestEntity" since it could be a TestSuite, a single TestCase (ad hoc run by a user to check a bug fix?(, a List of TestCases, a single TestAsset, a List of TestAssets (e.g. parametric declaration of Andrew's TSV...)
+9:19
+etc.
+9:20
+that is, make decisions on how to delegate the work to TestRunners, not micro-manage their access to the Tests repo data
+9:21
+TestRunners themselves can directly access the TestEntity data of interest from the Tests repo, using the code library I'm attempting to write
+9:21
+I don't think that meshes with Max's view on the testing, though.
+9:24
+Tests repo == List[TestCase] => TestHarness == one-TestCase-at-a-time => one or more TestRunners == TestCase (pass/fail Pytest) result => (3rd party) Information Radiator  (edited) 
+9:25
+versus the following:
+
+
+Richard Bruskiewich (SRI)
+  9:30 AM
+Tests repo (explicit files of TestAssets + parametric declarations of TestCases/Suites) == TestEntity identification => TestHarness == TestEntity identification => one or more TestRunners (use TestEntity specification to directly access TestAsset/Case/Suite entities using Tests repo library) == TestCase result (fully annotated) => (3rd party) Information Radiator (with TestAsset/Case/Suite annotation) (edited) 
+9:31
+just changed TestEntity specification to TestEntity identification
+9:32
+since I think that since the TestRunners would directly access their desired Test data from the repository, they just need to ask for it by identifier(?)
+9:34
+another tweak above: the current information radiator only knows about Pytest pass/fail
+9:34
+without use case annotation.
+9:35
+I'm thinking that the SRI_Testing TestCase/Suite (fully annotated JSON) idea may have more mileage.
+9:35
+I actually figured out mid-week last week what may be needed but haven't yet had time to implement it:
+9:36
+Specify a standard Python parent library for TestRunner
+9:39
+i.e. a wrapper class that all (Python?) TestRunners would subclass, that would use the Tests repo access library to get their testing data.
+9:39
+and generate a standardized JSON report
+9:39
+that would be more informative than a simple Pytest
+
+
+Sierra Moxon (SRI)
+  9:39 AM
+I'm sorry - its hard for me to keep up here; other slack posts are disrupting my flow of understanding.
+
+
+Richard Bruskiewich (SRI)
+  9:39 AM
+Ok
+9:39
+np
+9:40
+I'll just close by saying I think that Max's TestHarness is partly the above, but when I asked him for the common TestRunner API, he says there is none, and that he felt that the 'model' for the TestRunner belongs in the TranslatorTestingModel
+9:41
+I chuckled a bit to myself when he said that. He's only partly right. Full answer is not just a test schema, but some shared library code that we need to write by had (or, if lazy, by ChatGPT4, LOL)
+
+
+
+
+
+9:41
+ok... I'll stop now.
+9:42
+Thanks for listening
+9:42
+I'll just start coding a bit more today.
+9:42
+see how far I get
+9:45
+Trying to explain my ideas to you, might have helped clarify my own thinking to myself, :rolling_on_the_floor_laughing:

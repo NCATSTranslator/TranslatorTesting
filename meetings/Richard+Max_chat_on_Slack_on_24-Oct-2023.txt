@@ -1,0 +1,24 @@
+Richard:
+Good morning Max,
+I am interacting with Jenn about the test assets and vision for testing, did suggest to me that what I am calling the "Test Manager" merits the name, in being a SME/SMURF/LinkBroker/etc. user centric user interface wrapped testing infrastructure controller to effectively "manage" test resources (into targeted test suites for ad hoc or scheduled running) then to (manually) "CRUD" manage test sessions & results, with suitable various auth/auth user levels and permissions.
+
+Max:
+Would ITRB go through the Test Manager to kick off some tests? Because ultimately they are the initial “trigger” of a test run
+
+Richard:
+Assuming that the Test Manager is running within the ITRB cloud with access to the Test Harness and Runner code ( perhaps all deployed in suitable containers in Kubernetes? or whatever they use.. I haven't myself been paying much attention to that), then what one could envision here is that the heart of the Test Manager could have business logic that makes ad hoc  requests to the Test Harness to schedule the execution of a Test Runner on a specified Test Suite.  That logic could be wrapped with an OpenAPI web service API which either could be programmatically used directly by ITRB or used via an (administrative?) UI wrapper of the OpenAPI services (a part of the "Information Radiator" dashboard part of the Test Manager). 
+BTW, is there any reason to limit test run triggers to ITRB?
+
+Or might (suitably authenticated and authorized Translator or NCATS admin) users also be allowed to configure and trigger a test run (possibly mostly "one-of" but maybe sometimes an updated cronjob-scheduled test).
+
+From what I know so far, I perceive ITRB as "devops" managers of IT resources, not the ultimate primary drivers of Translator system quality assurance that the various categories of testing will imply
+
+ITRB will be responsible for keeping the test infrastructure up and running, some of which will be "automated, routine, CI" kind of stuff, but I suspect that the continued intellectual health of the system in the future, will require the SMEs, SMURFS and NCATS scientific stakeholders driving (i.e. periodically updating) the testing priorities, mostly by defining TestAssets but also, the Test Cases, Suites and perhaps, (less frequently) new Runners that reflect their scientific needs... all within a disciplined release cycle, of course.
+
+Back to implementation: Jenn worksheet => Test Documentation "app" (TranslatorTestingModel + some code) => Test Assets ++ (in Tests repo) => Tests API (in a short while, once I get my fresh bearings on the task, you and I can decide what that piece of the MVP looks like...) => Test Harness/Runner => Test Results (somewhere sensible for now...for show and tell next week)
+
+Max Wang:
+I honestly wasn’t imagining the Information Radiator having a way for users to manually kick off tests. There are certainly complexities that go along with that like user authentication (don’t want someone unauthorized spamming the tests, some authorized spamming is fine :wink: ). But if that’s what people want, then I think it makes sense. To clarify, the Test Harness is not a running “service” that can be queried, it is a CLI/python module. I was imagining ITRB just calling that CLI as either part of a cron job or triggered via a new deployment, but it wouldn’t be too hard to change that to just send a query to the Test Manager who then calls the Test Harness CLI
+
+Richard:
+"...To clarify, the Test Harness is not a running “service” that can be queried, it is a CLI/python module...." sounds fine. We just need to figure out how best to request a run remotely through some simple SOP, in the (possible) case that the TestHarness and the TestManager are not co-resident on a server or networked set of running containers?
